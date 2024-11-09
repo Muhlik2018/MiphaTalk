@@ -55,7 +55,7 @@ def get_rms( block ):
 def is_speech(frame, sample_rate):
     return True
 
-def record_audio(audioSeconds):
+def record_audio(audioSeconds,slienceAllowance):
     audio = pyaudio.PyAudio()
     stream = audio.open(format=FORMAT,
                     channels=CHANNELS,
@@ -70,7 +70,7 @@ def record_audio(audioSeconds):
     framesCount=0
     silenceCount=0
     recordCount=0
-    slienceAllowance=int(RATE/CHUNK*audioSeconds/2)
+    slienceAllowance=int(RATE/CHUNK*slienceAllowance)
     while framesCount<framesNeed/2:
         frame = stream.read(CHUNK)
         amplitutde=get_rms(frame)
@@ -135,7 +135,7 @@ def record_sound():
             current_time = now.strftime("%H%M%S")
             EditAudioFile.multiOsSound("./Resources/Hear.mp3",False)
             print("catch question...")
-            main_frames =record_audio(5)
+            main_frames =record_audio(10,5)
             while not main_frames is False:
                 audio_file_path="MAIN"+current_time+".wav"
                 save_audio(main_frames,audio_file_path)
@@ -144,7 +144,7 @@ def record_sound():
                 print("get answer...")
                 EditAudioFile.multiOsRm(audio_file_path)
                 chatHistory=GPTReply.getGPTReply(maintext,chatHistory)
-                main_frames =record_audio(5)
+                main_frames =record_audio(10,5)
             EditAudioFile.multiOsSound("./Resources/Goodbye2.mp3",False)
         else:
             print("No sound detected in this round")

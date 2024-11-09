@@ -1,6 +1,7 @@
 from playsound import playsound
 import os
 import platform
+import time
 
 def multiOsRm(filepath):
     if "mac" in platform.platform():
