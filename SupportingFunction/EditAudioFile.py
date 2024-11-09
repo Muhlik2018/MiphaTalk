@@ -13,7 +13,7 @@ def multiOsRm(filepath):
 
 def windowsPlaysound(filepath, delete=True):
     import winsound
-    winsound.PlaySound    
+    winsound.PlaySound(filepath)    
     if delete:
         multiOsRm(filepath)    
     # os.system("del  "+filepath)

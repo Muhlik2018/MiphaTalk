@@ -1,5 +1,4 @@
 import pyaudio
-import webrtcvad
 import numpy as np
 import wave
 import struct
@@ -13,9 +12,6 @@ from WakeUpWord import WakeUpDetect
 from SupportingFunction import EditAudioFile
 
 
-# Initialize VAD
-vad = webrtcvad.Vad()
-vad.set_mode(0)  # 0: Aggressive filtering, 3: Less aggressive
 
 # Audio configuration
 FORMAT = pyaudio.paInt16
@@ -55,9 +51,9 @@ def get_rms( block ):
 
     return math.sqrt( sum_squares / count )
 
-
+# depracated
 def is_speech(frame, sample_rate):
-    return vad.is_speech(frame, sample_rate)
+    return True
 
 def record_audio(audioSeconds):
     audio = pyaudio.PyAudio()
