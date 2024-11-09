@@ -11,7 +11,6 @@ def detection():
     CHUNK = 1280
     audio = pyaudio.PyAudio()
     mic_stream = audio.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
-    openwakeword.utils.download_models()
     owwModel = Model(wakeword_models=["./WakeUpWord/Hi_Mipha.onnx"],inference_framework="onnx")
     maxiumWaitTime=int(RATE/CHUNK*3)
     counter=0
