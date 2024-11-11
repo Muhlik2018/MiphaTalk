@@ -58,10 +58,8 @@ def getGPTReply(text, conversation_history= [{'role': 'system', 'content': 'You 
 
     audio_response.stream_to_file(audio_file_path)
     # windowsPlaysound(audio_file_path)
-    SupportingFunction.EditAudioFile.multiOsSound(audio_file_path)
-
     conversation_history.append({'role': 'assistant', 'content': assistant_reply})
-    return conversation_history
+    return [conversation_history,assistant_reply,audio_file_path]
 
 
 
