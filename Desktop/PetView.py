@@ -60,6 +60,9 @@ class DesktopPet(QWidget):
         return True
 
     def setText(self,txt):
+        if len(txt)>10:
+            txt=txt[0:9]
+            txt+="..."
         self.talkLabel.setText(txt)
         self.talkLabel.setStyleSheet(
                 "font: bold;"
@@ -272,6 +275,8 @@ class DesktopPet(QWidget):
         self.is_follow_mouse = False
         # 鼠标图形设置为箭头
         self.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
+        self.setIdling()
+
  
  
     # 鼠标移进时调用

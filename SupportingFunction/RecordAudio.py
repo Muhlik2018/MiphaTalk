@@ -2,7 +2,6 @@ import pyaudio
 import wave
 import struct
 import math
-from playsound import playsound
 import numpy as np
 from datetime import datetime
 from GPTInteract import GPTReply

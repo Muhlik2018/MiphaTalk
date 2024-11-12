@@ -1,4 +1,4 @@
-from playsound import playsound
+from SupportingFunction import playsound
 import os
 import platform
 import time
@@ -12,7 +12,7 @@ def multiOsRm(filepath):
         os.remove('./'+filepath)
  
 def multiOsSound(filepath,delete=True):
-    playsound(filepath)
+    playsound.playsound(filepath)
     if delete:
         multiOsRm(filepath)
 

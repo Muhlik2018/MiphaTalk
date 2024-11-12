@@ -1,5 +1,4 @@
 import sys
-import numpy as np
 from datetime import datetime
 from GPTInteract import GPTReply
 from GPTInteract import GPTToText
@@ -18,10 +17,10 @@ def record_sound(controlView):
 # Example usage
     chatHistory=[{'role': 'system', 'content': 'You are mipha, a character from legends of Zelda'}]
     print("start")
+    controlView.setIdling()
     while True:
         # frames=record_audio(0.5)
         # if  not frames is False:
-        controlView.setIdling()
         print("start catch hot word")
         isHotword=WakeUpDetect.detection()
         if isHotword:
@@ -48,6 +47,7 @@ def record_sound(controlView):
                     chatHistory.pop(2)
                 main_frames =RecordAudio.record_audio(10,5)
             EditAudioFile.multiOsSound("./Resources/Goodbye2.mp3",False)
+            controlView.setIdling()
         else:
             print("No sound detected in this round")
 
