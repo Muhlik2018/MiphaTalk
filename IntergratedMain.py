@@ -43,6 +43,9 @@ def record_sound(controlView):
                 chatHistory=GPTOutput[0]
                 controlView.setTalking(txt=GPTOutput[1])
                 EditAudioFile.multiOsSound(GPTOutput[2])
+                if len(chatHistory)>=10:
+                    chatHistory.pop(1)
+                    chatHistory.pop(2)
                 main_frames =RecordAudio.record_audio(10,5)
             EditAudioFile.multiOsSound("./Resources/Goodbye2.mp3",False)
         else:
