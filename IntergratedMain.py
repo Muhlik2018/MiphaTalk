@@ -1,22 +1,23 @@
 import sys
+import live2d.v3 as live2d
 from datetime import datetime
 from GPTInteract import GPTReply
 from GPTInteract import GPTToText
 from WakeUpWord import WakeUpDetect
 from SupportingFunction import EditAudioFile
 from SupportingFunction import RecordAudio
-from Desktop import PetView
+from Desktop import L2DView
 from SupportingFunction import RecordAudio
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 import threading
-from SupportingFunction import GetKey
+from SupportingFunction import ReadFile
 
 
-def record_sound(controlView,key):
+def record_sound(controlView,key, character="You are mipha, a character from legends of Zelda"):
 # Example usage
-    chatHistory=[{'role': 'system', 'content': 'You are mipha, a character from legends of Zelda'}]
+    chatHistory=[{'role': 'system', 'content': character}]
     print("start")
     controlView.setIdling()
     while True:
@@ -27,7 +28,8 @@ def record_sound(controlView,key):
         if isHotword:
             now = datetime.now()
             current_time = now.strftime("%H%M%S")
-            controlView.setTalking(txt="Hi")
+            txt_time = now.strftime("%H:%M:%S")
+            controlView.setTalking(txt="Hi Hi")
             EditAudioFile.multiOsSound("./Resources/Audio/Hear.mp3",False)
             controlView.setThinking()
             print("catch question...")
@@ -48,8 +50,11 @@ def record_sound(controlView,key):
                     chatHistory.pop(2)
                 main_frames =RecordAudio.record_audio(10,5)
             EditAudioFile.multiOsSound("./Resources/Audio/Goodbye2.mp3",False)
-            controlView.setIdling()
+            controlView.setIdling(txt=txt_time)
         else:
+            now = datetime.now()
+            txt_time = now.strftime("%H:%M:%S")
+            controlView.setIdling(txt=txt_time)
             print("No sound detected in this round")
 
 
@@ -60,24 +65,19 @@ class recordThread (threading.Thread):   #继承父类threading.Thread
         self.name = name
         self.counter = counter
     def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数 
-        record_sound(pet,key=GetKey.getKey())
-
-class viewThread (threading.Thread):   #继承父类threading.Thread
-    def __init__(self, threadID, name, counter):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.counter = counter
-    def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数 
-        app = QApplication(sys.argv)
-        pet = PetView.DesktopPet()
-        app.exec()
-
+        record_sound(win,key=ReadFile.getKey(),character=ReadFile.getCharacter())
 
 
 thread1 = recordThread(1, "Thread-1", 1)
 # thread2 = viewThread(1, "Thread-2", 1)
+
+live2d.init()
+
 app = QApplication(sys.argv)
-pet = PetView.DesktopPet()
+win = L2DView.Win()
+win.show()
 thread1.start()
 app.exec()
+
+live2d.dispose()
+

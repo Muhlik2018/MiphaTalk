@@ -4,7 +4,6 @@
 
 from openai import OpenAI
 from datetime import datetime
-from SupportingFunction import GetKey
 
 
 # def windowsPlaysound(filepath):

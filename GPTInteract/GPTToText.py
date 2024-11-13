@@ -1,5 +1,4 @@
 from openai import OpenAI
-from SupportingFunction import GetKey
 def speechToText(audio_filepath,key=''):
   client=OpenAI(api_key=key)
 
