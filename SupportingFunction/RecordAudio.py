@@ -2,12 +2,6 @@ import pyaudio
 import wave
 import struct
 import math
-import numpy as np
-from datetime import datetime
-from GPTInteract import GPTReply
-from GPTInteract import GPTToText
-from WakeUpWord import WakeUpDetect
-from SupportingFunction import EditAudioFile
 
 # Audio configuration
 FORMAT = pyaudio.paInt16

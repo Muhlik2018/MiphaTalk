@@ -4,6 +4,7 @@
 
 from openai import OpenAI
 from datetime import datetime
+from SupportingFunction import GetKey
 
 
 # def windowsPlaysound(filepath):
@@ -15,9 +16,9 @@ from datetime import datetime
     # os.remove('./'+filepath)
 # ftDetect.findFeature()
 # 设置OpenAI API密钥
-def getGPTReply(text, conversation_history= [{'role': 'system', 'content': 'You are mipha, a character from legends of Zelda'}]):
-    client=OpenAI(api_key='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'#这里需要替换为你的账户API KEY
-    )
+
+def getGPTReply(text, conversation_history= [{'role': 'system', 'content': 'You are mipha, a character from legends of Zelda'}],key=""):
+    client=OpenAI(api_key=key)
 
     # 定义初始对话历史
     # conversation_history = [
@@ -56,7 +57,6 @@ def getGPTReply(text, conversation_history= [{'role': 'system', 'content': 'You 
     # windowsPlaysound(audio_file_path)
     conversation_history.append({'role': 'assistant', 'content': assistant_reply})
     return [conversation_history,assistant_reply,audio_file_path]
-
 
 
 

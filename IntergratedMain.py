@@ -11,9 +11,10 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 import threading
+from SupportingFunction import GetKey
 
 
-def record_sound(controlView):
+def record_sound(controlView,key):
 # Example usage
     chatHistory=[{'role': 'system', 'content': 'You are mipha, a character from legends of Zelda'}]
     print("start")
@@ -27,7 +28,7 @@ def record_sound(controlView):
             now = datetime.now()
             current_time = now.strftime("%H%M%S")
             controlView.setTalking(txt="Hi")
-            EditAudioFile.multiOsSound("./Resources/Hear.mp3",False)
+            EditAudioFile.multiOsSound("./Resources/Audio/Hear.mp3",False)
             controlView.setThinking()
             print("catch question...")
             main_frames =RecordAudio.record_audio(10,5)
@@ -35,10 +36,10 @@ def record_sound(controlView):
                 audio_file_path="MAIN"+current_time+".wav"
                 RecordAudio.save_audio(main_frames,audio_file_path)
                 print("to text...")
-                maintext=GPTToText.speechToText(audio_file_path)
+                maintext=GPTToText.speechToText(audio_file_path,key)
                 print("get answer...")
                 EditAudioFile.multiOsRm(audio_file_path)
-                GPTOutput=GPTReply.getGPTReply(maintext,chatHistory)
+                GPTOutput=GPTReply.getGPTReply(maintext,chatHistory,key)
                 chatHistory=GPTOutput[0]
                 controlView.setTalking(txt=GPTOutput[1])
                 EditAudioFile.multiOsSound(GPTOutput[2])
@@ -46,7 +47,7 @@ def record_sound(controlView):
                     chatHistory.pop(1)
                     chatHistory.pop(2)
                 main_frames =RecordAudio.record_audio(10,5)
-            EditAudioFile.multiOsSound("./Resources/Goodbye2.mp3",False)
+            EditAudioFile.multiOsSound("./Resources/Audio/Goodbye2.mp3",False)
             controlView.setIdling()
         else:
             print("No sound detected in this round")
@@ -59,7 +60,7 @@ class recordThread (threading.Thread):   #继承父类threading.Thread
         self.name = name
         self.counter = counter
     def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数 
-        record_sound(pet)
+        record_sound(pet,key=GetKey.getKey())
 
 class viewThread (threading.Thread):   #继承父类threading.Thread
     def __init__(self, threadID, name, counter):

@@ -1,10 +1,6 @@
 import os
 import sys
 import random
-# from PyQt5.QtGui import *
-# from PyQt5.QtCore import *
-# from PyQt5.QtWidgets import *
-from SupportingFunction import RecordAudio
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
@@ -24,7 +20,7 @@ class DesktopPet(QWidget):
 
     def setTalking(self,txt):
             # 读取特殊状态图片路径
-        self.movie = QMovie("./Desktop/normal/Talk_qihai.gif")
+        self.movie = QMovie("./Resources/Image/normal/Talk_qihai.gif")
             # 宠物大小
         self.movie.setScaledSize(QSize(200, 200))
             # 将动画添加到label中
@@ -36,7 +32,7 @@ class DesktopPet(QWidget):
     
     def setIdling(self):
             # 读取特殊状态图片路径
-        self.movie = QMovie("./Desktop/normal/Idle_qihai.gif")
+        self.movie = QMovie("./Resources/Image/normal/Idle_qihai.gif")
             # 宠物大小
         self.movie.setScaledSize(QSize(200, 200))
             # 将动画添加到label中
@@ -49,7 +45,7 @@ class DesktopPet(QWidget):
     
     def setThinking(self):
             # 读取特殊状态图片路径
-        self.movie = QMovie("./Desktop/normal/Think_qihai.gif")
+        self.movie = QMovie("./Resources/Image/normal/Think_qihai.gif")
             # 宠物大小
         self.movie.setScaledSize(QSize(200, 200))
             # 将动画添加到label中
@@ -93,7 +89,7 @@ class DesktopPet(QWidget):
     # 托盘化设置初始化
     def initPall(self):
         # 导入准备在托盘化显示上使用的图标
-        icons = os.path.join('./Desktop/tigerIcon.jpg')
+        icons = os.path.join('./Resources/Image/tigerIcon.jpg')
         # 设置右键显示最小化的菜单项
         # 菜单项退出，点击后调用quit函数
         quit_action = QAction('退出', self, triggered=self.quit)
@@ -125,7 +121,7 @@ class DesktopPet(QWidget):
         # 定义显示图片部分
         self.image = QLabel(self)
         # QMovie是一个可以存放动态视频的类，一般是配合QLabel使用的,可以用来存放GIF动态图
-        self.movie = QMovie("./Desktop/normal/Idle.gif")
+        self.movie = QMovie("./Resources/Image/normal/Idle.gif")
         # 设置标签大小
         self.movie.setScaledSize(QSize(200, 200))
         # 将Qmovie在定义的image中显示
@@ -139,12 +135,12 @@ class DesktopPet(QWidget):
         # https://new.qq.com/rain/a/20211014a002rs00
         # 将宠物正常待机状态的动图放入pet1中
         self.pet1 = []
-        for i in os.listdir("./Desktop/normal"):
-            self.pet1.append("./Desktop/normal/" + i)
+        for i in os.listdir("./Resources/Image/normal"):
+            self.pet1.append("./Resources/Image/normal/" + i)
         # 将宠物正常待机状态的对话放入pet2中
         self.dialog = []
         # 读取目录下dialog文件
-        with open("./Desktop/dialog.txt", "r",encoding='unicode_escape') as f:
+        with open("./Resources/Image/dialog.txt", "r",encoding='unicode_escape') as f:
             text = f.read()
             # 以\n 即换行符为分隔符，分割放进dialog中
             self.dialog = text.split("\n")
@@ -185,7 +181,7 @@ class DesktopPet(QWidget):
         # 这里可以通过else-if语句往下拓展做更多的交互功能
         else:
             # 读取特殊状态图片路径
-            self.movie = QMovie("./Desktop/click/click_qihai.gif")
+            self.movie = QMovie("./Resources/Image/click/click_qihai.gif")
             # 宠物大小
             self.movie.setScaledSize(QSize(200, 200))
             # 将动画添加到label中
