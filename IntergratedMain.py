@@ -20,11 +20,13 @@ def record_sound(controlView,key, character="You are mipha, a character from leg
     chatHistory=[{'role': 'system', 'content': character}]
     print("start")
     controlView.setIdling()
+    refreshTime=datetime.now()
     while True:
         # frames=record_audio(0.5)
         # if  not frames is False:
-        print("start catch hot word")
+        # print("start catch hot word")
         isHotword=WakeUpDetect.detection()
+        # isHotword= False
         if isHotword:
             now = datetime.now()
             current_time = now.strftime("%H%M%S")
@@ -32,7 +34,7 @@ def record_sound(controlView,key, character="You are mipha, a character from leg
             controlView.setTalking(txt="Hi Hi")
             EditAudioFile.multiOsSound("./Resources/Audio/Hear.mp3",False)
             controlView.setThinking()
-            print("catch question...")
+            # print("catch question...")
             main_frames =RecordAudio.record_audio(10,5)
             while not main_frames is False:
                 audio_file_path="MAIN"+current_time+".wav"
@@ -51,11 +53,17 @@ def record_sound(controlView,key, character="You are mipha, a character from leg
                 main_frames =RecordAudio.record_audio(10,5)
             EditAudioFile.multiOsSound("./Resources/Audio/Goodbye2.mp3",False)
             controlView.setIdling(txt=txt_time)
+            refreshTime=datetime.now()
         else:
             now = datetime.now()
             txt_time = now.strftime("%H:%M:%S")
-            controlView.setIdling(txt=txt_time)
-            print("No sound detected in this round")
+            if (now-refreshTime).total_seconds()>10:
+               controlView.setIdling(txt=txt_time)
+               refreshTime=now
+            elif (now-refreshTime).total_seconds()>1:
+                controlView.setLabelText(txt=txt_time)
+
+            # print("No sound detected in this round")
 
 
 class recordThread (threading.Thread):   #继承父类threading.Thread
@@ -68,6 +76,7 @@ class recordThread (threading.Thread):   #继承父类threading.Thread
         record_sound(win,key=ReadFile.getKey(),character=ReadFile.getCharacter())
 
 
+
 thread1 = recordThread(1, "Thread-1", 1)
 # thread2 = viewThread(1, "Thread-2", 1)
 
@@ -77,7 +86,10 @@ app = QApplication(sys.argv)
 win = L2DView.Win()
 win.show()
 thread1.start()
-app.exec()
+try:
+ app.exec()
+except Exception as e:
+ print(f"发生错误：{e}")
 
 live2d.dispose()
 

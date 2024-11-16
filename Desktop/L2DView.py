@@ -27,6 +27,8 @@ class Win(QOpenGLWidget):
         self.setAutoFillBackground(False)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground, True)
         self.a = 0
+        self.motion="Idle"
+        self.motionChange=True
         self.resize(400, 300)
         self.initPall()
 
@@ -65,22 +67,38 @@ class Win(QOpenGLWidget):
         # setWindowOpacity（）设置窗体的透明度，通过调整窗体透明度实现宠物的展示和隐藏
         self.setWindowOpacity(1)
 
+    def onMotionStarted(self):
+        self.motionChange=False
 
     def onMotionFinshed(self):
+        self.motionChange=True
         self.model.SetRandomExpression()
 
     def setTalking(self,txt):
+        if self.motion == "Talk":
+            self.setLabelText(txt=txt)
+            return
+        self.motion="Talk"
+        # if self.motionChange:
         self.model.StartMotion("Idle", 4, live2d.MotionPriority.FORCE.value, onFinishMotionHandler=self.onMotionFinshed)
         self.setLabelText(txt=txt)
             # 宠物状态设置为正常待机
     
     def setIdling(self,txt="Nooooooo"):
+        if self.motion == "Idle":
+            self.setLabelText(txt=txt)
+            return
+        self.motion="Idle"
         self.setLabelText(txt=txt)
-        self.model.StartRandomMotion("Idle",1,onFinishMotionHandler=self.onMotionFinshed)
+        self.model.StartRandomMotion("Idle",live2d.MotionPriority.FORCE.value,onFinishMotionHandler=self.onMotionFinshed)
         self.model.SetRandomExpression()
             # 宠物状态设置为正常待机
         return True
     def setThinking(self):
+        if self.motion == "think":
+            self.setLabelText(txt="?......")
+            return
+        self.motion="think"
         self.model.StartMotion("Idle", 5, live2d.MotionPriority.FORCE.value, onFinishMotionHandler=self.onMotionFinshed)
         self.setLabelText(txt="?.....")
         return True
@@ -89,13 +107,6 @@ class Win(QOpenGLWidget):
             txt=txt[0:9]
             txt+="..."
         self.talkLabel.setText(txt)
-        self.talkLabel.setStyleSheet(
-                "font: bold;"
-                "font:25pt '楷体';"
-                "color:white;"
-                "background-color: white"
-                "url(:/)"
-        )
         self.talkLabel.adjustSize()
 
 
@@ -110,7 +121,13 @@ class Win(QOpenGLWidget):
                 # 对话框定义
         self.talkLabel = QLabel(self)
         # 对话框样式设计
-        self.talkLabel.setStyleSheet("font:15pt '楷体';border-width: 1px;color:blue;")
+        self.talkLabel.setStyleSheet(
+                "font: bold;"
+                "font:25pt '楷体';"
+                "color:white;"
+                "background-color: white"
+                "url(:/)"
+        )
         # 将当前窗口作为 OpenGL 的上下文
         # 图形会被绘制到当前窗口
         self.makeCurrent()
@@ -152,10 +169,14 @@ class Win(QOpenGLWidget):
         self.update() 
     def mouseReleaseEvent(self, event):
         self.is_follow_mouse = False
+        self.mouse_drag_pos=None
         self.setIdling(txt="Finally...")
 
     def mousePressEvent(self, event: QMouseEvent) -> None:
-        self.model.StartMotion("Idle", 7, live2d.MotionPriority.FORCE.value, onFinishMotionHandler=self.onMotionFinshed)
+        if not self.motion=="Click":
+            print("do something")
+            self.model.StartMotion("Idle", 7, live2d.MotionPriority.FORCE.value, onFinishMotionHandler=self.onMotionFinshed)
+        self.motion="Click"
         # 传入鼠标点击位置的窗口坐标
         if event.button() == Qt.MouseButton.LeftButton:
             self.is_follow_mouse = True
@@ -170,6 +191,6 @@ class Win(QOpenGLWidget):
         if Qt.MouseButton.LeftButton and self.is_follow_mouse:
             # 宠物随鼠标进行移动
             self.move((event.position() - self.mouse_drag_pos).toPoint())
-        self.model.Drag(event.pos().x(), event.pos().y())
+        # self.model.Drag(event.pos().x(), event.pos().y())
         event.accept()
 
